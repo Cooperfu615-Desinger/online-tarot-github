@@ -82,7 +82,7 @@ function App() {
         setError(null);
 
         const prompt = generatePrompt();
-        const modelsToTry = ['gemini-1.5-flash', 'gemini-1.5-flash-latest', 'gemini-1.5-pro', 'gemini-1.0-pro'];
+        const modelsToTry = ['gemini-1.5-flash'];
         let success = false;
         let finalError = null;
 
