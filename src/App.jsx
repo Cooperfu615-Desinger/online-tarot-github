@@ -85,7 +85,7 @@ function App() {
         const prompt = generatePrompt();
 
         try {
-            setLoadingStatus(`正在嘗試連結 gemini-1.5-flash 模型...`);
+            setLoadingStatus("正在連結阿卡西紀錄，解讀您的命運...");
 
             const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
             const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
