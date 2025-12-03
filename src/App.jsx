@@ -266,20 +266,19 @@ function App() {
                             </div>
                         </div>
 
-                        <div className="relative w-full min-h-[500px] bg-white/5 rounded-3xl border border-white/5 p-4 md:p-8 overflow-hidden shadow-inner mb-8">
+                        <div className="relative w-full min-h-[250px] bg-white/5 rounded-3xl border border-white/5 p-4 md:p-8 overflow-hidden shadow-inner mb-8">
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-600/5 rounded-full blur-3xl pointer-events-none"></div>
                             {renderLayout()}
                         </div>
 
-                        {allCardsRevealed && (
-                            <AIResultPanel
-                                loading={aiLoading}
-                                result={aiResult}
-                                onAsk={fetchGeminiReading}
-                                error={error}
-                                status={loadingStatus}
-                            />
-                        )}
+                        <AIResultPanel
+                            loading={aiLoading}
+                            result={aiResult}
+                            onAsk={fetchGeminiReading}
+                            error={error}
+                            status={loadingStatus}
+                            isReady={allCardsRevealed}
+                        />
                     </div>
                 )}
             </main>

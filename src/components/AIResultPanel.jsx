@@ -1,7 +1,7 @@
 import React, { useRef, useEffect } from 'react';
 import { Bot, Sparkles, Loader2, AlertCircle } from 'lucide-react';
 
-const AIResultPanel = ({ loading, result, onAsk, error, status }) => {
+const AIResultPanel = ({ loading, result, onAsk, error, status, isReady }) => {
     const scrollRef = useRef(null);
 
     useEffect(() => {
@@ -25,7 +25,9 @@ const AIResultPanel = ({ loading, result, onAsk, error, status }) => {
                 <div className="p-6 md:p-8 min-h-[150px]">
                     {!result && !loading && (
                         <div className="text-center py-4">
-                            <p className="text-slate-300 mb-6 text-lg">所有的牌都已翻開，命運的路徑已顯現。</p>
+                            <p className="text-slate-300 mb-6 text-lg">
+                                {isReady ? "所有的牌都已翻開，命運的路徑已顯現。" : "命運的路徑正在顯現..."}
+                            </p>
 
                             {error && (
                                 <div className="max-w-md mx-auto mb-6 p-3 bg-red-900/30 border border-red-500/50 rounded flex items-center gap-2 text-red-200 text-sm">
@@ -36,10 +38,14 @@ const AIResultPanel = ({ loading, result, onAsk, error, status }) => {
 
                             <button
                                 onClick={onAsk}
-                                className="group relative px-8 py-3 bg-amber-600 hover:bg-amber-500 text-white rounded-full font-bold transition-all hover:shadow-[0_0_20px_rgba(245,158,11,0.5)] flex items-center gap-2 mx-auto"
+                                disabled={!isReady}
+                                className={`group relative px-8 py-3 rounded-full font-bold transition-all flex items-center gap-2 mx-auto ${isReady
+                                        ? 'bg-amber-600 hover:bg-amber-500 text-white hover:shadow-[0_0_20px_rgba(245,158,11,0.5)]'
+                                        : 'bg-slate-700 text-slate-400 cursor-not-allowed'
+                                    }`}
                             >
-                                <Sparkles size={18} className="group-hover:animate-spin" />
-                                請求大師解牌
+                                <Sparkles size={18} className={isReady ? "group-hover:animate-spin" : ""} />
+                                {isReady ? "請求大師解牌" : "請先翻開所有牌卡"}
                             </button>
                         </div>
                     )}

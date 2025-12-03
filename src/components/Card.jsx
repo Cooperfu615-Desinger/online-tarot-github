@@ -7,7 +7,7 @@ const Card = ({ data, positionName, isRevealed, onReveal, index, isNew }) => {
             <div
                 onClick={onReveal}
                 className={`
-                    relative w-24 h-40 md:w-32 md:h-48 cursor-pointer transition-all duration-700 transform preserve-3d
+                    relative w-32 h-48 md:w-56 md:h-84 cursor-pointer transition-all duration-700 transform preserve-3d
                     ${isRevealed ? 'rotate-y-180' : 'hover:-translate-y-2'}
                 `}
                 style={{ transformStyle: 'preserve-3d' }}
