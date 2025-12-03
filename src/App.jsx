@@ -10,7 +10,7 @@ import AIResultPanel from './components/AIResultPanel';
 
 // --- 設定您的 API KEY ---
 // 請將您的 Google AI Studio API Key 貼在下方引號中
-const GOOGLE_API_KEY = "AIzaSyCMxfAtkDvAuj0xv27trP1siAdW1Qe8MjI";
+const GOOGLE_API_KEY = "AIzaSyARDT3PDljPi5lzIdrvaoK32DF0ZusG0aA";
 
 function App() {
     const [currentView, setCurrentView] = useState('welcome');
@@ -88,7 +88,7 @@ function App() {
             setLoadingStatus(`正在嘗試連結 gemini-1.5-flash 模型...`);
 
             const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash-001" }); // 如果失敗，請嘗試改用 "gemini-pro"
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
             const result = await model.generateContent(prompt);
             const response = await result.response;
             const text = response.text();
