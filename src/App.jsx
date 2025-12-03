@@ -88,7 +88,7 @@ function App() {
             setLoadingStatus(`正在嘗試連結 gemini-1.5-flash 模型...`);
 
             const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
-            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+            const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
             const result = await model.generateContent(prompt);
             const response = await result.response;
             const text = response.text();
