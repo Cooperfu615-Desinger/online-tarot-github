@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 import { Sparkles, RefreshCw, ChevronLeft, Bot } from 'lucide-react';
 import { MAJOR_ARCANA } from './data/tarotCards';
 import { spreads } from './data/spreads';
@@ -82,37 +83,23 @@ function App() {
         setError(null);
 
         const prompt = generatePrompt();
-        const modelsToTry = ['gemini-1.5-flash'];
-        let success = false;
-        let finalError = null;
 
-        for (const model of modelsToTry) {
-            if (success) break;
-            try {
-                setLoadingStatus(`正在嘗試連結 ${model} 模型...`);
-                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${GOOGLE_API_KEY}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ contents: [{ parts: [{ text: prompt }] }] })
-                });
-                const data = await response.json();
-                if (!response.ok) {
-                    finalError = data.error?.message;
-                    continue;
-                }
-                const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-                if (text) {
-                    setAiResult(text);
-                    success = true;
-                }
-            } catch (err) {
-                finalError = err.message;
+        try {
+            setLoadingStatus(`正在嘗試連結 gemini-1.5-flash 模型...`);
+
+            const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
+            const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
+            const result = await model.generateContent(prompt);
+            const response = await result.response;
+            const text = response.text();
+
+            if (text) {
+                setAiResult(text);
             }
+        } catch (err) {
+            setError(`連結失敗: ${err.message || "無法找到可用的模型，請檢查 API Key 是否正確。"}`);
         }
 
-        if (!success) {
-            setError(`連結失敗: ${finalError || "無法找到可用的模型，請檢查 API Key 是否正確。"}`);
-        }
         setAiLoading(false);
         setLoadingStatus("");
     };
