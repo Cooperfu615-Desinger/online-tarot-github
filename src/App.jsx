@@ -105,6 +105,7 @@ function App() {
     };
 
     // 佈局渲染器
+    // 佈局渲染器
     const renderLayout = () => {
         const slots = Array.from({ length: selectedSpread.count });
         const renderSlot = (index, customClass = "") => {
@@ -129,60 +130,49 @@ function App() {
             );
         };
 
-        if (selectedSpread.layoutType === 'center') return <div className="flex justify-center items-center min-h-[40vh]">{renderSlot(0)}</div>;
-        if (selectedSpread.layoutType === 'horizontal') return <div className="flex flex-col md:flex-row justify-center items-center gap-8 min-h-[40vh]">{slots.map((_, i) => renderSlot(i))}</div>;
+        if (selectedSpread.layoutType === 'center') {
+            return (
+                <div className="flex justify-center items-center min-h-min py-10">
+                    {renderSlot(0)}
+                </div>
+            );
+        }
+
+        if (selectedSpread.layoutType === 'horizontal') {
+            return (
+                <div className="flex flex-col md:flex-row justify-center items-center gap-4 md:gap-8 min-h-min py-10">
+                    {slots.map((_, i) => renderSlot(i))}
+                </div>
+            );
+        }
+
         if (selectedSpread.layoutType === 'arch') {
+            // 馬蹄鐵：改為簡單的 Flex Wrap 置中排列
             return (
-                <div className="flex flex-wrap justify-center items-start gap-4 md:gap-2 min-h-[50vh] pt-10">
-                    <div className="grid grid-cols-2 md:flex md:items-end md:gap-4">
-                        {slots.map((_, i) => {
-                            let translateY = 'md:translate-y-0';
-                            if (i === 0 || i === 6) translateY = 'md:-translate-y-12';
-                            if (i === 1 || i === 5) translateY = 'md:-translate-y-4';
-                            if (i === 3) translateY = 'md:translate-y-4';
-                            return renderSlot(i, translateY);
-                        })}
-                    </div>
+                <div className="flex flex-wrap justify-center items-center gap-4 min-h-min py-10 max-w-4xl mx-auto">
+                    {slots.map((_, i) => renderSlot(i))}
                 </div>
             );
         }
+
         if (selectedSpread.layoutType === 'celtic') {
+            // 凱特爾十字：改為 Grid 佈局，上下兩排，每排 5 張
             return (
-                <div className="flex flex-col md:flex-row justify-center items-center gap-12 w-full max-w-5xl mx-auto">
-                    <div className="relative w-full md:w-1/2 h-[500px] flex items-center justify-center">
-                        <div className="md:hidden grid grid-cols-2 gap-4">{slots.slice(0, 6).map((_, i) => renderSlot(i))}</div>
-                        <div className="hidden md:block relative w-full h-full">
-                            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-10">{renderSlot(0)}</div>
-                            <div className="absolute top-1/2 left-1/2 translate-x-4 translate-y-4 z-20 rotate-90 scale-95 origin-center pointer-events-none">{renderSlot(1)}</div>
-                            <div className="absolute top-[80%] left-1/2 -translate-x-1/2 -translate-y-1/2">{renderSlot(2)}</div>
-                            <div className="absolute top-1/2 left-[15%] -translate-y-1/2">{renderSlot(3)}</div>
-                            <div className="absolute top-[20%] left-1/2 -translate-x-1/2 -translate-y-1/2">{renderSlot(4)}</div>
-                            <div className="absolute top-1/2 right-[15%] -translate-y-1/2">{renderSlot(5)}</div>
-                        </div>
-                    </div>
-                    <div className="flex flex-col-reverse gap-4 md:border-l md:border-amber-500/30 md:pl-12">
-                        {[6, 7, 8, 9].map(i => renderSlot(i))}
-                    </div>
+                <div className="grid grid-cols-2 md:grid-cols-5 gap-4 justify-items-center min-h-min py-10 max-w-6xl mx-auto">
+                    {slots.map((_, i) => renderSlot(i))}
                 </div>
             );
         }
+
         if (selectedSpread.layoutType === 'circle') {
+            // 黃道十二宮：改為 Grid 佈局，上下兩排，每排 6 張
             return (
-                <div className="relative min-h-[70vh] flex items-center justify-center w-full">
-                    <div className="md:hidden grid grid-cols-2 gap-4 pb-10">{slots.map((_, i) => renderSlot(i))}</div>
-                    <div className="hidden md:block relative w-[600px] h-[600px]">
-                        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20">{renderSlot(12)}</div>
-                        {slots.slice(0, 12).map((_, i) => {
-                            const angle = (i * 30) - 90;
-                            const radius = 250;
-                            const x = Math.cos((angle * Math.PI) / 180) * radius;
-                            const y = Math.sin((angle * Math.PI) / 180) * radius;
-                            return <div key={i} className="absolute top-1/2 left-1/2" style={{ transform: `translate(${x}px, ${y}px) translate(-50%, -50%)` }}>{renderSlot(i)}</div>;
-                        })}
-                    </div>
+                <div className="grid grid-cols-3 md:grid-cols-6 gap-4 justify-items-center min-h-min py-10 max-w-7xl mx-auto">
+                    {slots.map((_, i) => renderSlot(i))}
                 </div>
             );
         }
+
         return null;
     };
 
