@@ -118,3 +118,70 @@ dist
 
 # macOS
 .DS_Store
+
+# ================================
+# Security & Sensitive Files
+# ================================
+
+# Environment variables (all variants)
+.env
+.env.*
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
+*.env
+
+# Secret/Key files
+secrets.json
+secrets.*.json
+*.secret
+*.key
+*.pem
+*.p12
+*.pfx
+credentials.json
+service-account.json
+google-credentials.json
+
+# API Keys (backup files)
+api-keys.json
+api-keys.txt
+
+# ================================
+# Build Outputs
+# ================================
+
+# Vite/React build output
+dist/
+build/
+out/
+
+# ================================
+# IDE & Editor
+# ================================
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# JetBrains IDEs
+.idea/
+*.iml
+
+# ================================
+# Misc
+# ================================
+
+# Thumbnails
+Thumbs.db
+ehthumbs.db
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*~
