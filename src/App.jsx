@@ -10,7 +10,7 @@ import AIResultPanel from './components/AIResultPanel';
 
 // --- 設定您的 API KEY ---
 // 請將您的 Google AI Studio API Key 貼在下方引號中
-const GOOGLE_API_KEY = "AIzaSyC0GwSJy0zMiXYSWTZDJb2VwavVuJltQvg"; // Final API Key
+const GOOGLE_API_KEY = "AIzaSyDNzBlDn4GxtmIGpqGqw6_nYLkxuqCqxgs"; // K6 - HTTP Referrer Restricted
 
 function App() {
     const [currentView, setCurrentView] = useState('welcome');
