@@ -8,9 +8,6 @@ import Card from './components/Card';
 import Placeholder from './components/Placeholder';
 import AIResultPanel from './components/AIResultPanel';
 
-// --- 設定您的 API KEY ---
-// 請將您的 Google AI Studio API Key 貼在下方引號中
-const GOOGLE_API_KEY = "AIzaSyDNzBlDn4GxtmIGpqGqw6_nYLkxuqCqxgs"; // K6 - HTTP Referrer Restricted
 
 function App() {
     const [currentView, setCurrentView] = useState('welcome');
@@ -74,8 +71,8 @@ function App() {
     };
 
     const fetchGeminiReading = async () => {
-        if (!GOOGLE_API_KEY || GOOGLE_API_KEY.includes("您的")) {
-            setError("請先在程式碼中設定正確的 GOOGLE_API_KEY");
+        if (!import.meta.env.VITE_GOOGLE_API_KEY) {
+            setError("環境變數 VITE_GOOGLE_API_KEY 未設定");
             return;
         }
 
@@ -87,7 +84,7 @@ function App() {
         try {
             setLoadingStatus("正在連結阿卡西紀錄，解讀您的命運...");
 
-            const genAI = new GoogleGenerativeAI(GOOGLE_API_KEY);
+            const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_API_KEY);
             const model = genAI.getGenerativeModel({ model: "gemini-flash-latest" });
             const result = await model.generateContent(prompt);
             const response = await result.response;
