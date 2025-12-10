@@ -91,7 +91,7 @@ const AIResultPanel = ({ loading, result, onAsk, error, status, isReady }) => {
                         <div className="p-2 bg-amber-500/20 rounded-full">
                             <Bot className="text-amber-300" size={24} />
                         </div>
-                        <h3 className="text-xl font-bold text-amber-100">AI 靈視解讀 (Gemini)</h3>
+                        <h3 className="text-xl font-bold text-amber-100">Gemini 解讀</h3>
                     </div>
                 </div>
 

@@ -1,11 +1,6 @@
 import React from 'react';
 
 const ShareableCard = ({ drawnCards, spreadName, aiSummary }) => {
-    // 截斷文字邏輯：超過 100 字元則截取並加上省略號
-    const truncatedSummary = aiSummary
-        ? (aiSummary.length > 100 ? aiSummary.substring(0, 100) + '...' : aiSummary)
-        : '';
-
     return (
         <div
             id="shareable-card"
@@ -48,11 +43,11 @@ const ShareableCard = ({ drawnCards, spreadName, aiSummary }) => {
                     <div className="w-16 h-0.5 bg-gradient-to-r from-amber-500 to-transparent"></div>
                 </div>
 
-                {/* AI Summary Quote */}
-                {truncatedSummary && (
+                {/* AI Summary - 完整顯示 */}
+                {aiSummary && (
                     <div className="mb-6">
                         <p className="text-amber-100 text-lg leading-relaxed text-left">
-                            「{truncatedSummary}」
+                            「{aiSummary}」
                         </p>
                     </div>
                 )}
@@ -60,7 +55,7 @@ const ShareableCard = ({ drawnCards, spreadName, aiSummary }) => {
                 {/* Footer */}
                 <div className="mt-auto">
                     <p className="text-slate-400 text-xs tracking-wider">
-                        ✨ 由 AI 智者為您解讀命運
+                        ✨ 由 Gemini 為您解讀命運
                     </p>
                     <p className="text-slate-500 text-xs mt-1">
                         VIBE QUIRK LABS
@@ -72,4 +67,5 @@ const ShareableCard = ({ drawnCards, spreadName, aiSummary }) => {
 };
 
 export default ShareableCard;
+
 
