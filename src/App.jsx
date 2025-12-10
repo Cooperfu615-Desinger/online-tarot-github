@@ -7,6 +7,7 @@ import ScatteredDeck from './components/ScatteredDeck';
 import Card from './components/Card';
 import Placeholder from './components/Placeholder';
 import AIResultPanel from './components/AIResultPanel';
+import ShareableCard from './components/ShareableCard';
 
 
 function App() {
@@ -55,6 +56,18 @@ function App() {
     };
 
     const allCardsRevealed = drawnCards.length === selectedSpread?.count && drawnCards.every(c => c.revealed);
+
+    // 從 AI 結果中提取精簡金句（取第一段或前 50 字）
+    const extractSummary = (text) => {
+        if (!text) return '';
+        // 嘗試提取第一個完整的句子作為金句
+        const firstSentence = text.split(/[。！？]/)[0];
+        if (firstSentence && firstSentence.length > 10 && firstSentence.length <= 80) {
+            return firstSentence;
+        }
+        // 否則取前 60 字
+        return text.substring(0, 60) + (text.length > 60 ? '...' : '');
+    };
 
     // AI 處理邏輯
     const generatePrompt = () => {
@@ -272,6 +285,15 @@ function App() {
                     </div>
                 )}
             </main>
+
+            {/* 隱藏的分享卡片 - 用於截圖 */}
+            {selectedSpread && drawnCards.length > 0 && (
+                <ShareableCard
+                    drawnCards={drawnCards}
+                    spreadName={selectedSpread.name}
+                    aiSummary={extractSummary(aiResult)}
+                />
+            )}
         </div>
     );
 }

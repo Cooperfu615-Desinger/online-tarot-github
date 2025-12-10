@@ -1,14 +1,69 @@
-import React, { useRef, useEffect } from 'react';
-import { Bot, Sparkles, Loader2, AlertCircle } from 'lucide-react';
+import React, { useRef, useEffect, useState } from 'react';
+import { Bot, Sparkles, Loader2, AlertCircle, Share2, Download } from 'lucide-react';
+import html2canvas from 'html2canvas';
 
 const AIResultPanel = ({ loading, result, onAsk, error, status, isReady }) => {
     const scrollRef = useRef(null);
+    const [isSharing, setIsSharing] = useState(false);
 
     useEffect(() => {
         if (result && scrollRef.current) {
             scrollRef.current.scrollIntoView({ behavior: "smooth" });
         }
     }, [result]);
+
+    const handleShare = async () => {
+        setIsSharing(true);
+        try {
+            const shareableElement = document.getElementById('shareable-card');
+            if (!shareableElement) {
+                alert('找不到分享卡片元件');
+                setIsSharing(false);
+                return;
+            }
+
+            // 使用 html2canvas 截圖
+            const canvas = await html2canvas(shareableElement, {
+                backgroundColor: '#0f0a1e',
+                scale: 2,
+                useCORS: true,
+                logging: false,
+            });
+
+            // 將 canvas 轉換為 Blob
+            const blob = await new Promise(resolve => {
+                canvas.toBlob(resolve, 'image/png', 1.0);
+            });
+
+            const file = new File([blob], 'mystic-tarot-reading.png', { type: 'image/png' });
+
+            // 嘗試使用 Web Share API
+            if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
+                await navigator.share({
+                    title: 'MYSTIC TAROT AI - 我的命運快照',
+                    text: '✨ 來看看 AI 智者為我解讀的命運訊息！',
+                    files: [file],
+                });
+            } else {
+                // 退化為下載圖片
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = 'mystic-tarot-reading.png';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+                URL.revokeObjectURL(url);
+                alert('圖片已下載！您可以手動上傳到社群分享。');
+            }
+        } catch (err) {
+            console.error('分享失敗:', err);
+            if (err.name !== 'AbortError') {
+                alert('分享過程中發生錯誤，請稍後再試。');
+            }
+        }
+        setIsSharing(false);
+    };
 
     return (
         <div className="mt-12 w-full max-w-4xl mx-auto" ref={scrollRef}>
@@ -40,8 +95,8 @@ const AIResultPanel = ({ loading, result, onAsk, error, status, isReady }) => {
                                 onClick={onAsk}
                                 disabled={!isReady}
                                 className={`group relative px-8 py-3 rounded-full font-bold transition-all flex items-center gap-2 mx-auto ${isReady
-                                        ? 'bg-amber-600 hover:bg-amber-500 text-white hover:shadow-[0_0_20px_rgba(245,158,11,0.5)]'
-                                        : 'bg-slate-700 text-slate-400 cursor-not-allowed'
+                                    ? 'bg-amber-600 hover:bg-amber-500 text-white hover:shadow-[0_0_20px_rgba(245,158,11,0.5)]'
+                                    : 'bg-slate-700 text-slate-400 cursor-not-allowed'
                                     }`}
                             >
                                 <Sparkles size={18} className={isReady ? "group-hover:animate-spin" : ""} />
@@ -67,7 +122,32 @@ const AIResultPanel = ({ loading, result, onAsk, error, status, isReady }) => {
                             <div className="whitespace-pre-wrap leading-relaxed text-slate-200 font-light text-lg">
                                 {result}
                             </div>
-                            <div className="mt-8 pt-4 border-t border-white/10 text-xs text-slate-500 text-center italic">
+
+                            {/* 分享按鈕 */}
+                            <div className="mt-8 pt-6 border-t border-white/10 flex flex-col items-center gap-4">
+                                <button
+                                    onClick={handleShare}
+                                    disabled={isSharing}
+                                    className="group px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-full font-bold text-white transition-all flex items-center gap-2 hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    {isSharing ? (
+                                        <>
+                                            <Loader2 size={18} className="animate-spin" />
+                                            正在準備分享...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <Share2 size={18} />
+                                            ✨ 分享我的命運快照
+                                        </>
+                                    )}
+                                </button>
+                                <p className="text-slate-500 text-xs">
+                                    生成精美圖片，分享到社群或儲存留念
+                                </p>
+                            </div>
+
+                            <div className="mt-6 pt-4 border-t border-white/10 text-xs text-slate-500 text-center italic">
                                 * 此解讀由 Google Gemini AI 生成，僅供娛樂與參考，請依隨您的直覺。
                             </div>
                         </div>
@@ -79,3 +159,4 @@ const AIResultPanel = ({ loading, result, onAsk, error, status, isReady }) => {
 };
 
 export default AIResultPanel;
+
