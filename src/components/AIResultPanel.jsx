@@ -14,7 +14,22 @@ const AIResultPanel = ({ loading, result, onAsk, error, status, isReady }) => {
 
     const handleShare = async () => {
         setIsSharing(true);
+
+        // 下載圖片的 Fallback 函式
+        const downloadImage = (blob) => {
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'mystic-tarot-reading.png';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            URL.revokeObjectURL(url);
+            alert('分享功能不支援此裝置，已為您下載圖片！');
+        };
+
         try {
+            // 第一步：找到截圖元素
             const shareableElement = document.getElementById('shareable-card');
             if (!shareableElement) {
                 alert('找不到分享卡片元件');
@@ -22,48 +37,51 @@ const AIResultPanel = ({ loading, result, onAsk, error, status, isReady }) => {
                 return;
             }
 
-            // 使用 html2canvas 截圖
+            // 第一步：使用 html2canvas 生成圖片（優化設定）
             const canvas = await html2canvas(shareableElement, {
                 backgroundColor: '#0f0a1e',
-                scale: 2,
                 useCORS: true,
+                allowTaint: true,
+                scale: 2,
                 logging: false,
             });
 
-            // 將 canvas 轉換為 Blob
+            // 第二步：將 canvas 轉換為 Blob
             const blob = await new Promise(resolve => {
                 canvas.toBlob(resolve, 'image/png', 1.0);
             });
 
             const file = new File([blob], 'mystic-tarot-reading.png', { type: 'image/png' });
 
-            // 嘗試使用 Web Share API
+            // 第三步：檢查瀏覽器是否支援 Web Share API 分享檔案
             if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-                await navigator.share({
-                    title: 'MYSTIC TAROT AI - 我的命運快照',
-                    text: '✨ 來看看 AI 智者為我解讀的命運訊息！',
-                    files: [file],
-                });
+                // 嘗試使用 Web Share API（放入獨立 try-catch）
+                try {
+                    await navigator.share({
+                        title: 'MYSTIC TAROT AI - 我的命運快照',
+                        text: '✨ 來看看 AI 智者為我解讀的命運訊息！',
+                        files: [file],
+                    });
+                } catch (shareError) {
+                    // 第四步 Fallback：分享失敗或用戶取消，執行下載
+                    console.log('分享 API 失敗，改為下載:', shareError.name);
+                    if (shareError.name !== 'AbortError') {
+                        // 非用戶主動取消，則下載圖片
+                        downloadImage(blob);
+                    }
+                    // 如果是 AbortError（用戶取消），不做任何動作
+                }
             } else {
-                // 退化為下載圖片
-                const url = URL.createObjectURL(blob);
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = 'mystic-tarot-reading.png';
-                document.body.appendChild(link);
-                link.click();
-                document.body.removeChild(link);
-                URL.revokeObjectURL(url);
-                alert('圖片已下載！您可以手動上傳到社群分享。');
+                // 瀏覽器不支援 Web Share API，直接下載
+                downloadImage(blob);
             }
         } catch (err) {
-            console.error('分享失敗:', err);
-            if (err.name !== 'AbortError') {
-                alert('分享過程中發生錯誤，請稍後再試。');
-            }
+            console.error('截圖生成失敗:', err);
+            alert('圖片生成過程中發生錯誤，請稍後再試。');
         }
         setIsSharing(false);
     };
+
 
     return (
         <div className="mt-12 w-full max-w-4xl mx-auto" ref={scrollRef}>
