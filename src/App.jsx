@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { Sparkles, RefreshCw, ChevronLeft } from 'lucide-react';
+import { RefreshCw, ChevronLeft, Sparkles } from 'lucide-react';
 import { MAJOR_ARCANA } from './data/tarotCards';
 import { spreads } from './data/spreads';
 import ScatteredDeck from './components/ScatteredDeck';
@@ -178,32 +178,29 @@ function App() {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-gray-900 via-purple-950 to-black text-amber-50 selection:bg-amber-500/30 overflow-x-hidden font-jhenghei">
-            <nav className="p-4 border-b border-white/10 flex justify-between items-center backdrop-blur-md sticky top-0 z-50">
-                <div className="flex items-center gap-2">
-                    <Sparkles className="text-amber-400" />
-                    <h1 className="text-xl font-bold tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-amber-200 to-yellow-500">
-                        MYSTIC TAROT AI
-                    </h1>
-                </div>
-                {currentView !== 'welcome' && (
+            {currentView !== 'welcome' && (
+                <nav className="p-4 border-b border-white/10 flex justify-end items-center backdrop-blur-md sticky top-0 z-50">
                     <button onClick={resetGame} className="flex items-center gap-1 text-sm text-slate-400 hover:text-white transition-colors">
                         <RefreshCw size={14} /> 重置
                     </button>
-                )}
-            </nav>
+                </nav>
+            )}
 
             <main className="container mx-auto px-4 py-8 min-h-[calc(100vh-80px)]">
                 {currentView === 'welcome' && (
-                    <div className="flex flex-col items-center justify-center h-[70vh] text-center space-y-8 animate-in fade-in duration-1000">
+                    <div className="relative flex flex-col items-center justify-center h-[85vh] text-center space-y-8 animate-in fade-in duration-1000">
                         <h2 className="text-5xl md:text-6xl font-light tracking-[0.2em] text-white">
                             MYSTIC TAROT AI
                         </h2>
-                        <p className="text-white max-w-md mx-auto">
+                        <p className="text-gray-400 max-w-md mx-auto">
                             結合古老塔羅智慧與現代人工智慧，為您揭示命運的啟示
                         </p>
                         <button onClick={handleStart} className="mt-8 px-12 py-4 bg-gradient-to-r from-amber-600 to-yellow-600 rounded-full text-white font-bold tracking-widest hover:scale-105 transition-transform shadow-[0_0_20px_rgba(217,119,6,0.4)]">
                             占卜
                         </button>
+                        <p className="absolute bottom-4 text-xs text-gray-500">
+                            CREATED BY VIBE QUIRK LABS
+                        </p>
                     </div>
                 )}
 
