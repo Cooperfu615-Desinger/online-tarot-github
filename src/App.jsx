@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { Sparkles, RefreshCw, ChevronLeft, Bot } from 'lucide-react';
+import { Sparkles, RefreshCw, ChevronLeft } from 'lucide-react';
 import { MAJOR_ARCANA } from './data/tarotCards';
 import { spreads } from './data/spreads';
 import ScatteredDeck from './components/ScatteredDeck';
@@ -195,18 +195,14 @@ function App() {
             <main className="container mx-auto px-4 py-8 min-h-[calc(100vh-80px)]">
                 {currentView === 'welcome' && (
                     <div className="flex flex-col items-center justify-center h-[70vh] text-center space-y-8 animate-in fade-in duration-1000">
-                        <div className="relative">
-                            <div className="absolute -inset-4 bg-purple-600/20 blur-xl rounded-full animate-pulse"></div>
-                            <Bot size={80} className="text-amber-200 relative z-10 drop-shadow-[0_0_15px_rgba(251,191,36,0.5)]" />
-                        </div>
-                        <h2 className="text-4xl md:text-6xl font-light tracking-widest">
-                            AI 靈性<span className="text-amber-400 font-bold italic">解讀</span>
+                        <h2 className="text-5xl md:text-6xl font-light tracking-[0.2em] text-white">
+                            MYSTIC TAROT AI
                         </h2>
-                        <p className="text-slate-400 max-w-md mx-auto">
-                            結合古老塔羅智慧與現代人工智慧，為您揭示命運的啟示。
+                        <p className="text-white max-w-md mx-auto">
+                            結合古老塔羅智慧與現代人工智慧，為您揭示命運的啟示
                         </p>
                         <button onClick={handleStart} className="mt-8 px-12 py-4 bg-gradient-to-r from-amber-600 to-yellow-600 rounded-full text-white font-bold tracking-widest hover:scale-105 transition-transform shadow-[0_0_20px_rgba(217,119,6,0.4)]">
-                            開始占卜
+                            占卜
                         </button>
                     </div>
                 )}
