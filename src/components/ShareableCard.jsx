@@ -45,9 +45,9 @@ const ShareableCard = ({ drawnCards, spreadName, aiSummary }) => {
 
                 {/* AI Summary - 完整顯示 */}
                 {aiSummary && (
-                    <div className="mb-6">
-                        <p className="text-amber-100 text-lg leading-relaxed text-left">
-                            「{aiSummary}」
+                    <div className="mb-6 overflow-hidden">
+                        <p className="text-amber-100 text-base leading-relaxed text-left whitespace-pre-wrap">
+                            {aiSummary}
                         </p>
                     </div>
                 )}
