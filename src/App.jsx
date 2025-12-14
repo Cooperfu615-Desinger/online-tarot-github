@@ -8,6 +8,7 @@ import Card from './components/Card';
 import Placeholder from './components/Placeholder';
 import AIResultPanel from './components/AIResultPanel';
 import ShareableCard from './components/ShareableCard';
+import QuestionInput from './components/QuestionInput';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
     const [aiResult, setAiResult] = useState(null);
     const [error, setError] = useState(null);
     const [loadingStatus, setLoadingStatus] = useState("");
+    const [userQuestion, setUserQuestion] = useState("");
 
     useEffect(() => {
         const shuffled = [...MAJOR_ARCANA].sort(() => Math.random() - 0.5);
@@ -32,6 +34,7 @@ function App() {
         setDrawnCards([]);
         setAiResult(null);
         setError(null);
+        setUserQuestion("");
         setCurrentView('reading');
     };
 
@@ -53,6 +56,7 @@ function App() {
         setDrawnCards([]);
         setAiResult(null);
         setError(null);
+        setUserQuestion("");
     };
 
     const allCardsRevealed = drawnCards.length === selectedSpread?.count && drawnCards.every(c => c.revealed);
@@ -71,7 +75,14 @@ function App() {
 
     // AI 處理邏輯
     const generatePrompt = () => {
-        let prompt = `你是一位專業且富有神祕感的塔羅牌占卜師。使用者選擇了「${selectedSpread.name}」。\n`;
+        let prompt = '';
+
+        // 如果使用者有輸入問題，加入到 Prompt 開頭
+        if (userQuestion.trim()) {
+            prompt += `使用者心中想問的問題是：「${userQuestion.trim()}」。請務必針對這個問題，結合牌義進行解答。\n\n`;
+        }
+
+        prompt += `你是一位專業且富有神祕感的塔羅牌占卜師。使用者選擇了「${selectedSpread.name}」。\n`;
         prompt += `牌陣描述：${selectedSpread.desc}。\n\n請根據以下抽出的牌進行綜合解讀：\n`;
 
         drawnCards.forEach((card, index) => {
@@ -245,6 +256,9 @@ function App() {
 
                 {currentView === 'reading' && selectedSpread && (
                     <div className="animate-in fade-in duration-500 pb-20">
+                        {/* 使用者提問輸入 */}
+                        <QuestionInput value={userQuestion} onChange={setUserQuestion} />
+
                         <div className="flex flex-col md:flex-row items-center justify-between mb-8 bg-black/20 p-4 rounded-lg backdrop-blur-sm border border-white/5">
                             <div>
                                 <h2 className="text-xl font-bold text-amber-200">{selectedSpread.name}</h2>
