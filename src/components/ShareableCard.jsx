@@ -1,126 +1,75 @@
 import React from 'react';
 
 const ShareableCard = ({ drawnCards, spreadName, aiResult }) => {
-    // 解析 AI 結果，提取特定段落
-    const parseAiResult = (text) => {
-        if (!text) return { interpretation: '', advice: '' };
+    // 解析 AI 結果，僅提取智者建議
+    const parseAdvice = (text) => {
+        if (!text) return '';
 
-        let interpretation = '';
-        let advice = '';
-
-        // 提取解讀段落
-        const interpretationMatch = text.match(/解讀[：:]\s*([\s\S]*?)(?=說明[：:]|智者建議[：:]|$)/);
-        if (interpretationMatch) {
-            interpretation = interpretationMatch[1].trim();
-        }
-
-        // 提取智者建議段落
         const adviceMatch = text.match(/智者建議[：:]\s*([\s\S]*?)(?=語氣與限制[：:]|$)/);
         if (adviceMatch) {
-            advice = adviceMatch[1].trim();
+            return adviceMatch[1].trim();
         }
-
-        return { interpretation, advice };
+        return '';
     };
 
-    const { interpretation, advice } = parseAiResult(aiResult);
-
-    // 根據牌數動態調整卡片大小
-    const cardCount = drawnCards?.length || 0;
-    const getCardSize = () => {
-        if (cardCount <= 3) return 'w-20 h-[140px]';
-        if (cardCount <= 7) return 'w-16 h-[112px]';
-        return 'w-14 h-[98px]'; // 多牌時縮小
-    };
-
-    const getGridCols = () => {
-        if (cardCount <= 3) return 'grid-cols-3';
-        if (cardCount <= 6) return 'grid-cols-3';
-        if (cardCount <= 9) return 'grid-cols-3';
-        return 'grid-cols-4'; // 10+ 張牌時 4 欄
-    };
+    const advice = parseAdvice(aiResult);
 
     return (
         <div
             id="shareable-card"
-            className="fixed top-[-9999px] left-[-9999px] w-[800px] h-[500px] bg-gradient-to-br from-gray-900 via-purple-950 to-black flex flex-row font-jhenghei overflow-hidden"
+            className="fixed top-[-9999px] left-[-9999px] w-[600px] h-auto bg-gradient-to-b from-gray-900 via-purple-950 to-black flex flex-col items-center font-jhenghei p-8"
         >
-            {/* 左側區域 - 真實塔羅牌圖片 (40%) */}
-            <div className="w-[40%] flex flex-col items-center justify-center p-3 bg-black/20">
-                {/* 牌陣名稱 */}
-                <p className="text-amber-400 text-sm tracking-wide mb-2">
-                    {spreadName || '塔羅占卜'}
-                </p>
+            {/* 牌陣名稱 */}
+            <p className="text-amber-400 text-lg tracking-wider mb-6">
+                {spreadName || '塔羅占卜'}
+            </p>
 
-                {/* 牌卡顯示 - 動態調整大小確保不被裁切 */}
-                <div className={`grid ${getGridCols()} gap-1.5 justify-items-center`}>
-                    {drawnCards && drawnCards.map((card, index) => (
-                        <div
-                            key={index}
-                            className={`${getCardSize()} rounded-md overflow-hidden border border-amber-500/50 shadow-lg ${card.isReversed ? 'rotate-180' : ''}`}
-                        >
-                            <img
-                                src={`${import.meta.env.BASE_URL}tarot-cards/card_${card.data?.id}.png`}
-                                alt={card.data?.name || '塔羅牌'}
-                                className="w-full h-full object-cover"
-                            />
-                        </div>
-                    ))}
-                </div>
+            {/* 塔羅牌展示區 - 重疊效果 */}
+            <div className="flex flex-row justify-center items-center mb-8">
+                {drawnCards && drawnCards.map((card, index) => (
+                    <div
+                        key={index}
+                        className={`w-36 h-auto rounded-lg overflow-hidden border-2 border-white/30 shadow-xl ${index === 0 ? '' : 'ml-[-60px]'} ${card.isReversed ? 'rotate-180' : ''}`}
+                        style={{ zIndex: index }}
+                    >
+                        <img
+                            src={`${import.meta.env.BASE_URL}tarot-cards/card_${card.data?.id}.png`}
+                            alt={card.data?.name || '塔羅牌'}
+                            className="w-full h-auto object-cover"
+                        />
+                    </div>
+                ))}
             </div>
 
-            {/* 右側區域 - 解讀與建議 (60%) */}
-            <div className="w-[60%] flex flex-col p-5 overflow-hidden">
-                {/* Header */}
-                <div className="mb-3">
-                    <h1 className="text-lg font-light tracking-[0.15em] text-white mb-1">
-                        MYSTIC TAROT AI
-                    </h1>
-                    <div className="w-16 h-0.5 bg-gradient-to-r from-amber-500 to-transparent"></div>
-                </div>
-
-                {/* 解讀區塊 - 移除 line-clamp 讓文字完整顯示 */}
-                {interpretation && (
-                    <div className="mb-3">
-                        <h2 className="text-amber-400 text-xs font-medium mb-1 flex items-center gap-1">
-                            ✨ 命運解讀
-                        </h2>
-                        <p className="text-amber-100/90 text-[11px] leading-relaxed whitespace-pre-wrap">
-                            {interpretation}
-                        </p>
-                    </div>
-                )}
-
-                {/* 智者建議區塊 - 移除 line-clamp */}
-                {advice && (
-                    <div className="flex-1 overflow-hidden">
-                        <h2 className="text-amber-400 text-xs font-medium mb-1 flex items-center gap-1">
-                            💡 智者建議
-                        </h2>
-                        <p className="text-amber-100/90 text-[11px] leading-relaxed whitespace-pre-wrap">
-                            {advice}
-                        </p>
-                    </div>
-                )}
-
-                {/* 如果沒有 AI 結果，顯示等待提示 */}
-                {!aiResult && (
-                    <div className="flex-1 flex items-center justify-center">
-                        <p className="text-slate-400 text-sm">
-                            等待 AI 解讀中...
-                        </p>
-                    </div>
-                )}
-
-                {/* Footer */}
-                <div className="mt-auto pt-1">
-                    <p className="text-slate-400 text-[10px] tracking-wider">
-                        ✨ 由 Gemini 為您解讀命運
-                    </p>
-                    <p className="text-slate-500 text-[9px] mt-0.5">
-                        VIBE QUIRK LABS
+            {/* 智者建議區 */}
+            {advice && (
+                <div className="w-full text-center px-4 mb-8">
+                    <h2 className="text-amber-400 text-lg font-medium mb-4 flex items-center justify-center gap-2">
+                        💡 智者建議
+                    </h2>
+                    <p className="text-amber-100/90 text-lg leading-loose whitespace-pre-wrap">
+                        {advice}
                     </p>
                 </div>
+            )}
+
+            {/* 如果沒有 AI 結果，顯示等待提示 */}
+            {!aiResult && (
+                <div className="text-center py-8">
+                    <p className="text-slate-400 text-lg">
+                        等待 AI 解讀中...
+                    </p>
+                </div>
+            )}
+
+            {/* 頁尾區 */}
+            <div className="mt-auto pt-6 text-center">
+                <p className="text-slate-400 text-sm tracking-wider">
+                    ✨ 由 Gemini 為您解讀命運
+                </p>
+                <p className="text-slate-500 text-xs mt-1">
+                    VIBE QUIRK LABS
+                </p>
             </div>
         </div>
     );
