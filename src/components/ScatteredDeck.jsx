@@ -1,5 +1,4 @@
 import React, { useRef } from 'react';
-import { Moon } from 'lucide-react';
 
 const ScatteredDeck = ({ onClick, remainingCards }) => {
     const randomStyles = useRef(
@@ -20,19 +19,18 @@ const ScatteredDeck = ({ onClick, remainingCards }) => {
             {randomStyles.map((style, i) => (
                 <div
                     key={i}
-                    className="absolute inset-0 w-full h-full bg-gradient-to-br from-indigo-900 to-purple-950 border border-amber-600/30 rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105"
+                    className="absolute inset-0 w-full h-full rounded-lg shadow-lg transition-transform duration-300 group-hover:scale-105 overflow-hidden border border-amber-600/30"
                     style={{
                         transform: `rotate(${style.rotation}deg) translate(${style.x}px, ${style.y}px)`,
                         zIndex: i,
                         filter: i === 4 ? 'brightness(1.1)' : 'brightness(1.0)'
                     }}
                 >
-                    <div className="w-full h-full opacity-30 bg-[url('https://www.transparenttextures.com/patterns/stardust.png')]"></div>
-                    {i === 4 && (
-                        <div className="absolute inset-0 flex items-center justify-center">
-                            <Moon className="text-amber-200/50 w-8 h-8" />
-                        </div>
-                    )}
+                    <img
+                        src="/tarot-cards/card_78.png"
+                        alt="Tarot Card Back"
+                        className="w-full h-full object-cover"
+                    />
                 </div>
             ))}
 
