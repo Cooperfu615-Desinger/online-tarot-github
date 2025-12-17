@@ -1,8 +1,19 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 
 const Card = ({ data, positionName, isRevealed, onReveal, index, isNew }) => {
     return (
-        <div className={`flex flex-col items-center group perspective-1000 flex-shrink-0 ${isNew ? 'animate-fly-in-from-right' : ''}`}>
+        <motion.div
+            className="flex flex-col items-center group perspective-1000 flex-shrink-0"
+            initial={isNew ? { x: 200, y: -200, opacity: 0, scale: 0.5 } : false}
+            animate={{ x: 0, y: 0, opacity: 1, scale: 1 }}
+            transition={{
+                type: "spring",
+                stiffness: 260,
+                damping: 20,
+                delay: isNew ? index * 0.15 : 0
+            }}
+        >
             <div
                 onClick={onReveal}
                 className={`
@@ -29,11 +40,16 @@ const Card = ({ data, positionName, isRevealed, onReveal, index, isNew }) => {
                     />
                 </div>
             </div>
-            <div className="mt-3 text-amber-200/80 text-sm font-medium tracking-wider text-center bg-black/40 px-2 py-1 rounded backdrop-blur-sm w-[160px]">
+            <motion.div
+                className="mt-3 text-amber-200/80 text-sm font-medium tracking-wider text-center bg-black/40 px-2 py-1 rounded backdrop-blur-sm w-[160px]"
+                initial={isNew ? { opacity: 0 } : false}
+                animate={{ opacity: 1 }}
+                transition={{ delay: isNew ? index * 0.15 + 0.3 : 0 }}
+            >
                 <span className="text-amber-500 mr-1">{index + 1}.</span>
                 {positionName}
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 };
 
