@@ -37,30 +37,18 @@ const ShareableCard = ({ drawnCards, spreadName, aiResult }) => {
                     {spreadName || '塔羅占卜'}
                 </p>
 
-                {/* 牌卡顯示 - 使用真實圖片 */}
-                <div className="flex flex-wrap justify-center items-start gap-2 max-h-[380px] overflow-hidden">
+                {/* 牌卡顯示 - 使用真實圖片，無文字標籤 */}
+                <div className="grid grid-cols-3 gap-2 max-h-[420px] overflow-hidden justify-items-center">
                     {drawnCards && drawnCards.map((card, index) => (
                         <div
                             key={index}
-                            className="flex flex-col items-center"
+                            className={`w-24 h-[168px] rounded-md overflow-hidden border border-amber-500/50 shadow-lg ${card.isReversed ? 'rotate-180' : ''}`}
                         >
-                            {/* 真實牌面圖片 */}
-                            <div
-                                className={`w-14 h-[98px] rounded-md overflow-hidden border border-amber-500/50 shadow-lg ${card.isReversed ? 'rotate-180' : ''}`}
-                            >
-                                <img
-                                    src={`${import.meta.env.BASE_URL}tarot-cards/card_${card.data?.id}.png`}
-                                    alt={card.data?.name || '塔羅牌'}
-                                    className="w-full h-full object-cover"
-                                />
-                            </div>
-                            {/* 牌名與狀態 */}
-                            <p className="text-amber-200 text-[9px] mt-1 text-center leading-tight max-w-[56px]">
-                                {card.data?.name}
-                            </p>
-                            <span className={`text-[8px] ${card.isReversed ? 'text-red-400' : 'text-green-400'}`}>
-                                ({card.isReversed ? '逆位' : '正位'})
-                            </span>
+                            <img
+                                src={`${import.meta.env.BASE_URL}tarot-cards/card_${card.data?.id}.png`}
+                                alt={card.data?.name || '塔羅牌'}
+                                className="w-full h-full object-cover"
+                            />
                         </div>
                     ))}
                 </div>
@@ -82,7 +70,7 @@ const ShareableCard = ({ drawnCards, spreadName, aiResult }) => {
                         <h2 className="text-amber-400 text-sm font-medium mb-2 flex items-center gap-1">
                             ✨ 命運解讀
                         </h2>
-                        <p className="text-amber-100/90 text-sm leading-relaxed whitespace-pre-wrap line-clamp-3">
+                        <p className="text-amber-100/90 text-xs leading-relaxed whitespace-pre-wrap line-clamp-4">
                             {interpretation}
                         </p>
                     </div>
@@ -94,7 +82,7 @@ const ShareableCard = ({ drawnCards, spreadName, aiResult }) => {
                         <h2 className="text-amber-400 text-sm font-medium mb-2 flex items-center gap-1">
                             💡 智者建議
                         </h2>
-                        <p className="text-amber-100/90 text-sm leading-relaxed whitespace-pre-wrap line-clamp-6">
+                        <p className="text-amber-100/90 text-xs leading-relaxed whitespace-pre-wrap line-clamp-8">
                             {advice}
                         </p>
                     </div>
