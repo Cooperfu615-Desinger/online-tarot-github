@@ -27,7 +27,7 @@ const ScatteredDeck = ({ onClick, remainingCards }) => {
                     }}
                 >
                     <img
-                        src="/tarot-cards/card_78.png"
+                        src={`${import.meta.env.BASE_URL}tarot-cards/card_78.png`}
                         alt="Tarot Card Back"
                         className="w-full h-full object-cover"
                     />

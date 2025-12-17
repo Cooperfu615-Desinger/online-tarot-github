@@ -14,7 +14,7 @@ const Card = ({ data, positionName, isRevealed, onReveal, index, isNew }) => {
                 {/* 卡牌背面 - 使用本地牌背圖片 */}
                 <div className="absolute inset-0 w-full h-full rounded-lg backface-hidden shadow-xl overflow-hidden border-2 border-amber-600/50">
                     <img
-                        src="/tarot-cards/card_78.png"
+                        src={`${import.meta.env.BASE_URL}tarot-cards/card_78.png`}
                         alt="Tarot Card Back"
                         className="w-full h-full object-cover"
                     />
@@ -23,7 +23,7 @@ const Card = ({ data, positionName, isRevealed, onReveal, index, isNew }) => {
                 {/* 卡牌正面 - 使用本地塔羅牌圖片 */}
                 <div className="absolute inset-0 w-full h-full rounded-lg backface-hidden rotate-y-180 shadow-[0_0_15px_rgba(251,191,36,0.4)] overflow-hidden border-2 border-amber-500">
                     <img
-                        src={`/tarot-cards/card_${data.id}.png`}
+                        src={`${import.meta.env.BASE_URL}tarot-cards/card_${data.id}.png`}
                         alt={data.name}
                         className="w-full h-full object-cover"
                     />
