@@ -51,7 +51,7 @@ const Card = ({ data, positionName, isRevealed, isReversed, onReveal, index, isN
 
                     {/* 卡牌正面 */}
                     <motion.div
-                        className="absolute inset-0 w-full h-full rounded-lg shadow-[0_0_15px_rgba(251,191,36,0.4)] overflow-hidden border-2 border-amber-500"
+                        className="absolute inset-0 w-full h-full rounded-lg shadow-[0_0_20px_rgba(255,255,255,0.5)] overflow-hidden border-2 border-white/70"
                         style={{
                             backfaceVisibility: 'hidden',
                             transform: 'rotateY(180deg)'
