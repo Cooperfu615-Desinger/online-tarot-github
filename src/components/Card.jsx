@@ -14,14 +14,9 @@ const Card = ({ data, positionName, isRevealed, isReversed, onReveal, index, isN
                 delay: isNew ? index * 0.15 : 0
             }}
         >
-            {/* 卡牌容器 - 只有這個容器會旋轉 */}
+            {/* 卡牌外層容器 - 處理逆位旋轉 */}
             <motion.div
-                onClick={onReveal}
-                className={`
-                    relative w-[160px] h-[281px] cursor-pointer transition-all duration-700 transform preserve-3d flex-shrink-0
-                    ${isRevealed ? 'rotate-y-180' : 'hover:-translate-y-2'}
-                `}
-                style={{ transformStyle: 'preserve-3d' }}
+                className="relative w-[160px] h-[281px] flex-shrink-0"
                 initial={isNew ? { rotate: isReversed ? 180 : 0 } : false}
                 animate={{ rotate: isReversed ? 180 : 0 }}
                 transition={{
@@ -31,23 +26,44 @@ const Card = ({ data, positionName, isRevealed, isReversed, onReveal, index, isN
                     delay: isNew ? index * 0.15 : 0
                 }}
             >
-                {/* 卡牌背面 - 使用本地牌背圖片 */}
-                <div className="absolute inset-0 w-full h-full rounded-lg backface-hidden shadow-xl overflow-hidden border-2 border-amber-600/50">
-                    <img
-                        src={`${import.meta.env.BASE_URL}tarot-cards/card_78.png`}
-                        alt="Tarot Card Back"
-                        className="w-full h-full object-cover"
-                    />
-                </div>
+                {/* 卡牌翻轉容器 - 處理點擊翻牌 */}
+                <motion.div
+                    onClick={onReveal}
+                    className="w-full h-full cursor-pointer"
+                    style={{
+                        transformStyle: 'preserve-3d',
+                        perspective: 1000
+                    }}
+                    animate={{ rotateY: isRevealed ? 180 : 0 }}
+                    transition={{ duration: 0.6, ease: "easeInOut" }}
+                >
+                    {/* 卡牌背面 */}
+                    <motion.div
+                        className="absolute inset-0 w-full h-full rounded-lg shadow-xl overflow-hidden border-2 border-amber-600/50"
+                        style={{ backfaceVisibility: 'hidden' }}
+                    >
+                        <img
+                            src={`${import.meta.env.BASE_URL}tarot-cards/card_78.png`}
+                            alt="Tarot Card Back"
+                            className="w-full h-full object-cover"
+                        />
+                    </motion.div>
 
-                {/* 卡牌正面 - 使用本地塔羅牌圖片 */}
-                <div className="absolute inset-0 w-full h-full rounded-lg backface-hidden rotate-y-180 shadow-[0_0_15px_rgba(251,191,36,0.4)] overflow-hidden border-2 border-amber-500">
-                    <img
-                        src={`${import.meta.env.BASE_URL}tarot-cards/card_${data.id}.png`}
-                        alt={data.name}
-                        className="w-full h-full object-cover"
-                    />
-                </div>
+                    {/* 卡牌正面 */}
+                    <motion.div
+                        className="absolute inset-0 w-full h-full rounded-lg shadow-[0_0_15px_rgba(251,191,36,0.4)] overflow-hidden border-2 border-amber-500"
+                        style={{
+                            backfaceVisibility: 'hidden',
+                            transform: 'rotateY(180deg)'
+                        }}
+                    >
+                        <img
+                            src={`${import.meta.env.BASE_URL}tarot-cards/card_${data.id}.png`}
+                            alt={data.name}
+                            className="w-full h-full object-cover"
+                        />
+                    </motion.div>
+                </motion.div>
             </motion.div>
 
             {/* 文字標籤 - 不會旋轉，維持正向 */}
