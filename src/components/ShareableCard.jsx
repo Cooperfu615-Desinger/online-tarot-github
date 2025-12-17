@@ -25,24 +25,39 @@ const ShareableCard = ({ drawnCards, spreadName, aiResult }) => {
 
     const { interpretation, advice } = parseAiResult(aiResult);
 
+    // 根據牌數動態調整卡片大小
+    const cardCount = drawnCards?.length || 0;
+    const getCardSize = () => {
+        if (cardCount <= 3) return 'w-20 h-[140px]';
+        if (cardCount <= 7) return 'w-16 h-[112px]';
+        return 'w-14 h-[98px]'; // 多牌時縮小
+    };
+
+    const getGridCols = () => {
+        if (cardCount <= 3) return 'grid-cols-3';
+        if (cardCount <= 6) return 'grid-cols-3';
+        if (cardCount <= 9) return 'grid-cols-3';
+        return 'grid-cols-4'; // 10+ 張牌時 4 欄
+    };
+
     return (
         <div
             id="shareable-card"
             className="fixed top-[-9999px] left-[-9999px] w-[800px] h-[500px] bg-gradient-to-br from-gray-900 via-purple-950 to-black flex flex-row font-jhenghei overflow-hidden"
         >
             {/* 左側區域 - 真實塔羅牌圖片 (40%) */}
-            <div className="w-[40%] flex flex-col items-center justify-center p-4 bg-black/20">
+            <div className="w-[40%] flex flex-col items-center justify-center p-3 bg-black/20">
                 {/* 牌陣名稱 */}
-                <p className="text-amber-400 text-sm tracking-wide mb-3">
+                <p className="text-amber-400 text-sm tracking-wide mb-2">
                     {spreadName || '塔羅占卜'}
                 </p>
 
-                {/* 牌卡顯示 - 使用真實圖片，無文字標籤 */}
-                <div className="grid grid-cols-3 gap-2 max-h-[420px] overflow-hidden justify-items-center">
+                {/* 牌卡顯示 - 動態調整大小確保不被裁切 */}
+                <div className={`grid ${getGridCols()} gap-1.5 justify-items-center`}>
                     {drawnCards && drawnCards.map((card, index) => (
                         <div
                             key={index}
-                            className={`w-24 h-[168px] rounded-md overflow-hidden border border-amber-500/50 shadow-lg ${card.isReversed ? 'rotate-180' : ''}`}
+                            className={`${getCardSize()} rounded-md overflow-hidden border border-amber-500/50 shadow-lg ${card.isReversed ? 'rotate-180' : ''}`}
                         >
                             <img
                                 src={`${import.meta.env.BASE_URL}tarot-cards/card_${card.data?.id}.png`}
@@ -55,34 +70,34 @@ const ShareableCard = ({ drawnCards, spreadName, aiResult }) => {
             </div>
 
             {/* 右側區域 - 解讀與建議 (60%) */}
-            <div className="w-[60%] flex flex-col p-6 overflow-hidden">
+            <div className="w-[60%] flex flex-col p-5 overflow-hidden">
                 {/* Header */}
-                <div className="mb-4">
-                    <h1 className="text-xl font-light tracking-[0.15em] text-white mb-1">
+                <div className="mb-3">
+                    <h1 className="text-lg font-light tracking-[0.15em] text-white mb-1">
                         MYSTIC TAROT AI
                     </h1>
                     <div className="w-16 h-0.5 bg-gradient-to-r from-amber-500 to-transparent"></div>
                 </div>
 
-                {/* 解讀區塊 */}
+                {/* 解讀區塊 - 移除 line-clamp 讓文字完整顯示 */}
                 {interpretation && (
-                    <div className="mb-4">
-                        <h2 className="text-amber-400 text-sm font-medium mb-2 flex items-center gap-1">
+                    <div className="mb-3">
+                        <h2 className="text-amber-400 text-xs font-medium mb-1 flex items-center gap-1">
                             ✨ 命運解讀
                         </h2>
-                        <p className="text-amber-100/90 text-xs leading-relaxed whitespace-pre-wrap line-clamp-4">
+                        <p className="text-amber-100/90 text-[11px] leading-relaxed whitespace-pre-wrap">
                             {interpretation}
                         </p>
                     </div>
                 )}
 
-                {/* 智者建議區塊 */}
+                {/* 智者建議區塊 - 移除 line-clamp */}
                 {advice && (
-                    <div className="mb-4 flex-1 overflow-hidden">
-                        <h2 className="text-amber-400 text-sm font-medium mb-2 flex items-center gap-1">
+                    <div className="flex-1 overflow-hidden">
+                        <h2 className="text-amber-400 text-xs font-medium mb-1 flex items-center gap-1">
                             💡 智者建議
                         </h2>
-                        <p className="text-amber-100/90 text-xs leading-relaxed whitespace-pre-wrap line-clamp-8">
+                        <p className="text-amber-100/90 text-[11px] leading-relaxed whitespace-pre-wrap">
                             {advice}
                         </p>
                     </div>
@@ -98,11 +113,11 @@ const ShareableCard = ({ drawnCards, spreadName, aiResult }) => {
                 )}
 
                 {/* Footer */}
-                <div className="mt-auto pt-2">
-                    <p className="text-slate-400 text-xs tracking-wider">
+                <div className="mt-auto pt-1">
+                    <p className="text-slate-400 text-[10px] tracking-wider">
                         ✨ 由 Gemini 為您解讀命運
                     </p>
-                    <p className="text-slate-500 text-[10px] mt-0.5">
+                    <p className="text-slate-500 text-[9px] mt-0.5">
                         VIBE QUIRK LABS
                     </p>
                 </div>
