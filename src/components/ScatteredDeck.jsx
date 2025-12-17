@@ -11,7 +11,7 @@ const ScatteredDeck = ({ onClick, remainingCards }) => {
 
     return (
         <div
-            className="relative w-24 h-32 md:w-32 md:h-44 cursor-pointer group select-none"
+            className="relative w-24 h-[168px] md:w-32 md:h-[225px] cursor-pointer group select-none"
             onClick={onClick}
         >
             <div className="absolute inset-0 bg-amber-500/20 blur-xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>

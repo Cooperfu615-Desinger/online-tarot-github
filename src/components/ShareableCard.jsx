@@ -20,7 +20,7 @@ const ShareableCard = ({ drawnCards, spreadName, aiSummary }) => {
                             key={index}
                             className="flex flex-col items-center"
                         >
-                            <div className="w-16 h-24 bg-gradient-to-br from-amber-600 to-yellow-700 rounded-lg border-2 border-amber-400/50 flex items-center justify-center shadow-lg">
+                            <div className="w-16 h-[112px] bg-gradient-to-br from-amber-600 to-yellow-700 rounded-lg border-2 border-amber-400/50 flex items-center justify-center shadow-lg">
                                 <span className="text-white text-center text-[10px] px-1 font-medium leading-tight">
                                     {card.data?.name || '神秘牌'}
                                 </span>
