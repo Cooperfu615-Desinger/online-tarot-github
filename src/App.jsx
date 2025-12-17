@@ -307,7 +307,7 @@ function App() {
                 <ShareableCard
                     drawnCards={drawnCards}
                     spreadName={selectedSpread.name}
-                    aiSummary={extractSummary(aiResult)}
+                    aiResult={aiResult}
                 />
             )}
         </div>
