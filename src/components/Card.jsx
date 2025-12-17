@@ -1,12 +1,12 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 
-const Card = ({ data, positionName, isRevealed, onReveal, index, isNew }) => {
+const Card = ({ data, positionName, isRevealed, isReversed, onReveal, index, isNew }) => {
     return (
         <motion.div
             className="flex flex-col items-center group perspective-1000 flex-shrink-0"
-            initial={isNew ? { x: 200, y: -200, opacity: 0, scale: 0.5 } : false}
-            animate={{ x: 0, y: 0, opacity: 1, scale: 1 }}
+            initial={isNew ? { x: 200, y: -200, opacity: 0, scale: 0.5, rotate: isReversed ? 180 : 0 } : false}
+            animate={{ x: 0, y: 0, opacity: 1, scale: 1, rotate: isReversed ? 180 : 0 }}
             transition={{
                 type: "spring",
                 stiffness: 260,
@@ -48,6 +48,9 @@ const Card = ({ data, positionName, isRevealed, onReveal, index, isNew }) => {
             >
                 <span className="text-amber-500 mr-1">{index + 1}.</span>
                 {positionName}
+                <span className={`ml-1 text-xs ${isReversed ? 'text-red-400' : 'text-green-400'}`}>
+                    ({isReversed ? '逆位' : '正位'})
+                </span>
             </motion.div>
         </motion.div>
     );

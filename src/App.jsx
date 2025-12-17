@@ -40,7 +40,7 @@ function App() {
 
     const handleDrawCard = () => {
         if (drawnCards.length >= selectedSpread.count) return;
-        const newCard = { data: deck[drawnCards.length], revealed: false };
+        const newCard = { data: deck[drawnCards.length], revealed: false, isReversed: Math.random() < 0.5 };
         setDrawnCards([...drawnCards, newCard]);
     };
 
@@ -87,7 +87,8 @@ function App() {
 
         drawnCards.forEach((card, index) => {
             const position = selectedSpread.positions[index];
-            prompt += `${index + 1}. 位置「${position}」抽到了：${card.data.name} (關鍵字：${card.data.keyword})\n`;
+            const orientation = card.isReversed ? '逆位' : '正位';
+            prompt += `${index + 1}. 位置「${position}」抽到了：${card.data.name} (${orientation}，關鍵字：${card.data.keyword})\n`;
         });
 
         prompt += `\n請務必嚴格遵守以下輸出格式（包含標題）：\n\n解讀：\n(這裡給出一句富含生活哲理或文學意境的結論，簡短有力)\n\n說明：\n(這是最主要的內容。請針對抽出的塔羅牌進行說明解釋。語氣要像一位飽讀詩書、充滿智慧的朋友，用幽默且有深度的口吻，引用文學、哲學或生活比喻來分析局勢。重點是通透的洞察力。每遇到句號就換行分段，讓文章更好閱讀。)\n\n智者建議：\n1. (建議一，精準明確)\n2. (建議二，精準明確)\n3. (建議三，精準明確)\n\n語氣與限制：\n1. 角色設定：一位博學、風趣且平等的「智者朋友」。\n2. 禁止使用「老夫、乖孫、孩子」等長輩對晚輩的詞彙。\n3. 禁止使用 Markdown 粗體符號 (**)。\n4. 總字數控制在 300 字以內。請使用繁體中文。`;
@@ -140,6 +141,7 @@ function App() {
                             data={card.data}
                             positionName={positionName}
                             isRevealed={card.revealed}
+                            isReversed={card.isReversed}
                             onReveal={() => toggleReveal(index)}
                             index={index}
                             isNew={isNew}
