@@ -267,21 +267,25 @@ function App() {
                                 <p className="text-sm text-slate-400">請翻開所有牌卡以解鎖 AI 解讀功能</p>
                             </div>
 
-                            <div className="mt-4 md:mt-0 flex items-center gap-6">
+                            <div className="mt-4 md:mt-0 flex flex-col items-center gap-2">
+                                {/* 提示訊息 - 放在牌堆正上方 */}
                                 {drawnCards.length < selectedSpread.count ? (
-                                    <div className="flex items-center gap-4">
-                                        <p className="text-sm animate-pulse text-amber-200 hidden md:block">點擊右側牌堆抽牌</p>
-                                        <ScatteredDeck onClick={handleDrawCard} remainingCards={selectedSpread.count - drawnCards.length} />
-                                    </div>
+                                    <p className="text-sm animate-pulse text-amber-200">點擊牌堆抽牌</p>
                                 ) : !allCardsRevealed ? (
-                                    <div className="text-sm text-amber-400 flex items-center gap-2 bg-amber-900/20 px-4 py-2 rounded-full border border-amber-500/30">
+                                    <div className="text-sm text-amber-400 flex items-center gap-2">
                                         <Sparkles size={14} /> 請點擊所有牌背將其翻開
                                     </div>
                                 ) : (
-                                    <div className="text-sm text-green-400 flex items-center gap-2 bg-green-900/20 px-4 py-2 rounded-full border border-green-500/30">
+                                    <div className="text-sm text-green-400 flex items-center gap-2">
                                         <Sparkles size={14} /> 準備就緒
                                     </div>
                                 )}
+
+                                {/* 牌堆 - 始終顯示 */}
+                                <ScatteredDeck
+                                    onClick={drawnCards.length < selectedSpread.count ? handleDrawCard : undefined}
+                                    remainingCards={selectedSpread.count - drawnCards.length}
+                                />
                             </div>
                         </div>
 
