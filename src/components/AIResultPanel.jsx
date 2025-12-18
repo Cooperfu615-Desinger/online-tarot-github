@@ -146,7 +146,7 @@ const AIResultPanel = ({ loading, result, onAsk, error, status, isReady }) => {
                                 <button
                                     onClick={handleShare}
                                     disabled={isSharing}
-                                    className="group px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-full font-bold text-white transition-all flex items-center gap-2 hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="group w-48 px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-500 hover:to-indigo-500 rounded-full font-bold text-white transition-all flex items-center justify-center gap-2 hover:shadow-[0_0_20px_rgba(139,92,246,0.5)] disabled:opacity-50 disabled:cursor-not-allowed"
                                 >
                                     {isSharing ? (
                                         <>
@@ -156,7 +156,7 @@ const AIResultPanel = ({ loading, result, onAsk, error, status, isReady }) => {
                                     ) : (
                                         <>
                                             <Share2 size={18} />
-                                            ✨ 分享我的命運快照
+                                            分享我的命運
                                         </>
                                     )}
                                 </button>
