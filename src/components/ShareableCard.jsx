@@ -44,7 +44,10 @@ const ShareableCard = ({ drawnCards, spreadName, aiResult }) => {
             </p>
 
             {/* 塔羅牌展示區 - 動態重疊效果 */}
-            <div className="flex flex-row justify-center items-center mb-6">
+            <div
+                className="flex justify-center items-center mb-6"
+                style={{ display: 'flex', flexDirection: 'row', flexWrap: 'nowrap' }}
+            >
                 {drawnCards && drawnCards.map((card, index) => (
                     <div
                         key={index}
