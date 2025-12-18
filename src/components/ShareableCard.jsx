@@ -16,12 +16,12 @@ const ShareableCard = ({ drawnCards, spreadName, aiResult }) => {
 
     // 動態計算卡片重疊距離
     const calculateOverlap = (cardCount) => {
-        const cardWidth = 192; // w-48 = 192px
-        const containerWidth = 550; // 預留 padding 的容器可用寬度
-        const maxOverlap = -160; // 最大重疊量，確保至少露出 30px
+        const cardWidth = 176; // w-44 = 176px
+        const containerWidth = 616; // 預留 padding 的容器可用寬度 (680px - 64px padding)
+        const maxOverlap = -150; // 最大重疊量，確保至少露出部分
 
         if (cardCount <= 1) return 0;
-        if (cardCount <= 3) return -80; // 少量牌維持較舒適的重疊
+        if (cardCount <= 3) return -70; // 少量牌維持較舒適的重疊
 
         // 多牌時動態計算：(容器寬度 - 單張牌寬度) / (牌數 - 1) - 牌寬度
         const calculatedMargin = (containerWidth - cardWidth) / (cardCount - 1) - cardWidth;
@@ -36,7 +36,7 @@ const ShareableCard = ({ drawnCards, spreadName, aiResult }) => {
     return (
         <div
             id="shareable-card"
-            className="fixed top-[-9999px] left-[-9999px] w-[600px] h-auto bg-gradient-to-b from-gray-900 via-purple-950 to-black flex flex-col items-center font-jhenghei p-8"
+            className="fixed top-[-9999px] left-[-9999px] w-[680px] h-auto bg-gradient-to-b from-gray-900 via-purple-950 to-black flex flex-col items-center font-jhenghei p-8"
         >
             {/* 牌陣名稱 - 亮紫色 */}
             <p className="text-fuchsia-400 text-xl font-medium tracking-wider mb-6">
@@ -48,17 +48,19 @@ const ShareableCard = ({ drawnCards, spreadName, aiResult }) => {
                 {drawnCards && drawnCards.map((card, index) => (
                     <div
                         key={index}
-                        className={`w-48 shrink-0 h-auto rounded-lg overflow-hidden ${card.isReversed ? 'rotate-180' : ''}`}
+                        className={`w-44 shrink-0 h-auto rounded-lg overflow-hidden ${card.isReversed ? 'rotate-180' : ''}`}
                         style={{
                             zIndex: index,
-                            marginLeft: index === 0 ? 0 : overlapValue,
-                            boxShadow: '-5px 0 10px rgba(0, 0, 0, 0.8)'
+                            marginLeft: index === 0 ? 0 : overlapValue
                         }}
                     >
                         <img
                             src={`${import.meta.env.BASE_URL}tarot-cards/card_${card.data?.id}.png`}
                             alt={card.data?.name || '塔羅牌'}
                             className="w-full h-auto object-cover rounded-lg"
+                            style={{
+                                filter: 'drop-shadow(-8px 0 8px rgba(0,0,0,0.8))'
+                            }}
                         />
                     </div>
                 ))}
