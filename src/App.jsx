@@ -268,17 +268,9 @@ function App() {
                             </div>
 
                             <div className="mt-4 md:mt-0 flex flex-col items-center gap-2">
-                                {/* 提示訊息 - 放在牌堆正上方 */}
-                                {drawnCards.length < selectedSpread.count ? (
+                                {/* 牌堆提示 */}
+                                {drawnCards.length < selectedSpread.count && (
                                     <p className="text-sm animate-pulse text-amber-200">點擊牌堆抽牌</p>
-                                ) : !allCardsRevealed ? (
-                                    <div className="text-sm text-amber-400 flex items-center gap-2">
-                                        <Sparkles size={14} /> 請點擊所有牌背將其翻開
-                                    </div>
-                                ) : (
-                                    <div className="text-sm text-green-400 flex items-center gap-2">
-                                        <Sparkles size={14} /> 準備就緒
-                                    </div>
                                 )}
 
                                 {/* 牌堆 - 始終顯示 */}
@@ -288,6 +280,21 @@ function App() {
                                 />
                             </div>
                         </div>
+
+                        {/* 翻牌/準備就緒提示 - 放在塔羅牌區域正上方 */}
+                        {drawnCards.length >= selectedSpread.count && (
+                            <div className="text-center mb-4">
+                                {!allCardsRevealed ? (
+                                    <div className="inline-flex items-center gap-2 text-amber-400 text-lg font-medium">
+                                        <Sparkles size={18} /> 請點擊所有牌背將其翻開
+                                    </div>
+                                ) : (
+                                    <div className="inline-flex items-center gap-2 text-green-400 text-lg font-medium">
+                                        <Sparkles size={18} /> 準備就緒
+                                    </div>
+                                )}
+                            </div>
+                        )}
 
                         <div className="relative w-full min-h-[250px] bg-white/5 rounded-3xl border border-white/5 p-4 md:p-8 overflow-hidden shadow-inner mb-8">
                             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-purple-600/5 rounded-full blur-3xl pointer-events-none"></div>
