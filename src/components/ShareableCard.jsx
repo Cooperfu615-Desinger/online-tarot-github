@@ -17,17 +17,17 @@ const ShareableCard = ({ drawnCards, spreadName, aiResult }) => {
     // 動態計算卡片重疊距離
     const calculateOverlap = (cardCount) => {
         const cardWidth = 192; // w-48 = 192px
-        const containerWidth = 536; // 600px - padding
+        const containerWidth = 550; // 預留 padding 的容器可用寬度
+        const maxOverlap = -160; // 最大重疊量，確保至少露出 30px
 
         if (cardCount <= 1) return 0;
-        if (cardCount <= 4) return -80; // 少量牌維持美觀重疊
+        if (cardCount <= 3) return -80; // 少量牌維持較舒適的重疊
 
-        // 多牌時動態計算，確保所有牌都能顯示在容器內
-        const totalWidth = cardWidth * cardCount;
-        const overflow = totalWidth - containerWidth;
-        const overlap = -Math.ceil(overflow / (cardCount - 1));
+        // 多牌時動態計算：(容器寬度 - 單張牌寬度) / (牌數 - 1) - 牌寬度
+        const calculatedMargin = (containerWidth - cardWidth) / (cardCount - 1) - cardWidth;
 
-        return Math.max(overlap, -160); // 限制最大重疊，避免完全遮蓋
+        // 取計算值與最大重疊量中較大（較寬鬆）的值
+        return Math.max(calculatedMargin, maxOverlap);
     };
 
     const cardCount = drawnCards?.length || 0;
@@ -48,16 +48,17 @@ const ShareableCard = ({ drawnCards, spreadName, aiResult }) => {
                 {drawnCards && drawnCards.map((card, index) => (
                     <div
                         key={index}
-                        className={`w-48 h-auto rounded-lg overflow-hidden ${card.isReversed ? 'rotate-180' : ''}`}
+                        className={`w-48 shrink-0 h-auto rounded-lg overflow-hidden ${card.isReversed ? 'rotate-180' : ''}`}
                         style={{
                             zIndex: index,
-                            marginLeft: index === 0 ? 0 : overlapValue
+                            marginLeft: index === 0 ? 0 : overlapValue,
+                            boxShadow: '-5px 0 10px rgba(0, 0, 0, 0.8)'
                         }}
                     >
                         <img
                             src={`${import.meta.env.BASE_URL}tarot-cards/card_${card.data?.id}.png`}
                             alt={card.data?.name || '塔羅牌'}
-                            className="w-full h-auto object-cover rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.6)]"
+                            className="w-full h-auto object-cover rounded-lg"
                         />
                     </div>
                 ))}
