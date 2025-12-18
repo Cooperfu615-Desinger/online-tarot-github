@@ -53,7 +53,8 @@ const ShareableCard = ({ drawnCards, spreadName, aiResult }) => {
                         key={index}
                         className={`w-44 shrink-0 h-auto rounded-lg overflow-hidden ${card.isReversed ? 'rotate-180' : ''}`}
                         style={{
-                            zIndex: index,
+                            position: 'relative',
+                            zIndex: index + 1,
                             marginLeft: index === 0 ? 0 : overlapValue
                         }}
                     >
